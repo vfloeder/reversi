@@ -18,6 +18,9 @@
 #ifndef GAMEHANDLER_H
 #define GAMEHANDLER_H
 
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 #include "Pos_Vect.h"
 #include "FieldValue.h"
 #include "CursesGrid.h"
@@ -67,6 +70,9 @@ public:
     // compute a "good" next move by analysing all possibilities down to a certain depth
     MoveInfo computeNextMove( Reversi::Stone stone, int depth );
 
+    void stop()
+    { m_stopCalculation = true; }
+
 protected:
     // get char to display for certain stone
     static int stone2Char( Reversi::Stone stone );
@@ -84,6 +90,8 @@ private:
     int          m_movesIdx { 0 };                                              // current index regarding valid moves
     FieldList    m_validMoves {};                                               // list of valid moves
     FieldList    m_UndoList {};                                                 // to undo the moves
+
+    std::atomic<bool>           m_stopCalculation { false };
 };
 
 #endif //GAMEHANDLER_H

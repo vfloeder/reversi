@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(Reversi)
 
+find_package(Threads REQUIRED)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -28,9 +29,9 @@ set(SOURCE_FILES
 add_executable(Reversi ${SOURCE_FILES})
 
 if(UNIX)
-target_link_libraries(Reversi ${PDCurses}/sdl1/libpdcurses.a SDL)
+target_link_libraries(Reversi ${PDCurses}/sdl1/libpdcurses.a SDL pthread)
 else()
-target_link_libraries(Reversi ${PDCurses}/win32/pdcurses.lib ${PDCurses}/win32/panel.lib )
+target_link_libraries(Reversi ${PDCurses}/win32/pdcurses.lib ${PDCurses}/win32/panel.lib)
 
 set_target_properties(Reversi PROPERTIES LINK_FLAGS  /NODEFAULTLIB:LIBCMT)
 endif()

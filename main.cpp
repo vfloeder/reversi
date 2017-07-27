@@ -17,6 +17,8 @@
 
 #include <signal.h>
 #include <atomic>
+#include <thread>
+#include <future>
 
 #include "FieldValue.h"
 #include "TerminalWindow.h"
@@ -31,6 +33,7 @@ int main()
     const int t_cols { 50 };
     const int t_rows { 25 };
     const int gridSize { 8 };
+    const int calcDepth { 5 };
 
     static const std::vector<std::string> helpText {
         { "Simple game of REVERSI" },
@@ -86,7 +89,7 @@ int main()
         ;
     gridView.print();
 
-    while( !game.ended() && !abortGame )
+    while( !abortGame )
     {
         const bool  canMove { game.prepareNextMove(thisMove) };
         bool        wait4Move { true };
@@ -116,7 +119,22 @@ int main()
 
         if( Reversi::Stone::WhiteStone == thisMove )
         {
-            GameHandler::MoveInfo inf = game.computeNextMove(thisMove, 4);
+            statusPrint(cnt, game.getWhiteStones(), game.getBlackStones(), game.getPossibleFlips(), "Calculating... press 'q' to abort");
+
+            getch();
+
+            // GameHandler::MoveInfo inf = game.computeNextMove(thisMove, 8);
+
+            std::future<GameHandler::MoveInfo> moveInfo { std::async(std::launch::async,
+                                                                     [&game, thisMove, calcDepth]() {return game.computeNextMove(thisMove, calcDepth);} ) };
+
+            while( std::future_status::ready != moveInfo.wait_for(std::chrono::milliseconds(50)) )
+            {
+                if( getch() == 'q' ) {
+                    game.stop();
+                }
+            }
+            GameHandler::MoveInfo inf = moveInfo.get();
 
             game.prepareNextMove(thisMove);
 

@@ -159,7 +159,7 @@ int GameHandler::getPossibleFlips()
 {
     int idx { m_validMoves.getBestPos() };                                          // get entry with maximum flips
 
-    return m_validMoves[idx].getValue();
+    return idx >= 0 ? m_validMoves[idx].getValue() : 0;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -195,6 +195,8 @@ GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int de
     int         alpha { -1000 };
     const int   beta { 1000 };
 
+    m_stopCalculation = false;
+
     prepareNextMove(stone, false);
 
     const int validMoves { static_cast<int>(m_validMoves.size()) };
@@ -202,6 +204,8 @@ GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int de
 
     while( idx < validMoves )
     {
+        if( m_stopCalculation ) break;
+
         makeMove(stone, false);
 
         const int score { minScore(stone, depth - 1, alpha, beta) };
@@ -242,6 +246,8 @@ int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
     while( idx < validMoves )
     {
+        if( m_stopCalculation ) break;
+
         makeMove(stone, false);
 
         const int score = minScore(stone, depth - 1, alpha, beta);
@@ -278,6 +284,8 @@ int GameHandler::minScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
     while( idx < validMoves )
     {
+        if( m_stopCalculation ) break;
+
         makeMove(stone, false);
 
         const int score = maxScore(stone, depth - 1, alpha, beta);
