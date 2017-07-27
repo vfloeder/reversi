@@ -1,0 +1,7 @@
+cmake-build-debug/
+.idea/
+oldstuff.cpp
+bin/
+*.srctrlbm
+*.srctrldb
+*.srctrlprj
