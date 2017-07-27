@@ -57,8 +57,6 @@ void CursesGrid::printHelp( std::vector<std::string> lines )
 
     for( int i = 0; i < lines.size(); ++i )
     {
-//        move(i, 0);
-//        clrtoeol();
         move(i, 0);
         addstr(lines[i].c_str());
     }
@@ -214,7 +212,7 @@ void CursesGrid::print()
 
 }
 
-// =====================================================================================================================
+// ---------------------------------------------------------------------------------------------------------------------
 
 // we can only print values 1 .. 9, for larger values we print a '+' instead
 void CursesGrid::markCells( const FieldList& fieldList, bool reverse )
@@ -229,7 +227,7 @@ void CursesGrid::markCells( const FieldList& fieldList, bool reverse )
     }
 }
 
-// =====================================================================================================================
+// ---------------------------------------------------------------------------------------------------------------------
 
 void CursesGrid::unmarkCells( const FieldList& fieldList )
 {
