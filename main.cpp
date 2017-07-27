@@ -119,7 +119,7 @@ int main()
 
         if( Reversi::Stone::WhiteStone == thisMove )
         {
-            statusPrint(cnt, game.getWhiteStones(), game.getBlackStones(), game.getPossibleFlips(), "Calculating... press 'q' to abort");
+            statusPrint(cnt, game.getWhiteStones(), game.getBlackStones(), game.getPossibleFlips(), "Calculating... press 'c' to abort");
 
             getch();
 
@@ -130,7 +130,7 @@ int main()
 
             while( std::future_status::ready != moveInfo.wait_for(std::chrono::milliseconds(50)) )
             {
-                if( getch() == 'q' ) {
+                if( getch() == 'c' ) {
                     game.stop();
                 }
             }

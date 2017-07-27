@@ -2,6 +2,7 @@ cmake-build-debug/
 .idea/
 oldstuff.cpp
 bin/
+x64/
 *.srctrlbm
 *.srctrldb
 *.srctrlprj
