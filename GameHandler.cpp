@@ -75,7 +75,8 @@ bool GameHandler::prepareNextMove( Reversi::Stone thisMove, bool view )
 
         m_curPos = m_validMoves[m_movesIdx].getPosition();                          // set cursor to max. flips
 
-        if( view ) m_gridView.markField(m_curPos, reverse);
+        if( view )
+            m_gridView.markCell(m_curPos, reverse);
 
         return true;
     }
@@ -89,11 +90,13 @@ void GameHandler::selectNextValidMove( Reversi::Stone stone, bool view )
 {
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
-    if( view ) m_gridView.unmarkField(m_validMoves[m_movesIdx].getPosition(), reverse);
+    if( view )
+        m_gridView.unmarkCell(m_validMoves[m_movesIdx].getPosition(), reverse);
 
     m_movesIdx = ( m_movesIdx + 1 ) % m_validMoves.size();
     m_curPos   = m_validMoves[m_movesIdx].getPosition();
-    if( view ) m_gridView.markField(m_curPos, reverse);
+    if( view )
+        m_gridView.markCell(m_curPos, reverse);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -102,12 +105,12 @@ void GameHandler::selectValidMove( Reversi::Stone stone, int idx )
 {
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
-    m_gridView.unmarkField(m_validMoves[m_movesIdx].getPosition(), reverse);
+    m_gridView.unmarkCell(m_validMoves[m_movesIdx].getPosition(), reverse);
 
     m_movesIdx = idx;
 
     m_curPos   = m_validMoves[m_movesIdx].getPosition();
-    m_gridView.markField(m_curPos, reverse);
+    m_gridView.markCell(m_curPos, reverse);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

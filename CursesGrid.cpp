@@ -78,7 +78,7 @@ void CursesGrid::setCursor( const Pos_Vect& pos )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::markField( const Pos_Vect& pos, bool reverse )
+void CursesGrid::markCell( const Pos_Vect& pos, bool reverse )
 {
     int newChar { m_Grid.peekField(pos) };
 
@@ -98,7 +98,7 @@ void CursesGrid::markField( const Pos_Vect& pos, bool reverse )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::unmarkField( const Pos_Vect& pos, bool reverse )
+void CursesGrid::unmarkCell( const Pos_Vect& pos, bool reverse )
 {
     int newChar { m_Grid.peekField(pos) };
 

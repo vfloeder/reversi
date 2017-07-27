@@ -25,11 +25,12 @@
 
 // =====================================================================================================================
 
-// class to represent the "value" of a field of the game-board by means of the number of stones that
-// will get flipped if a stone of a certain color is placed on that field.
-//
-// For easier handling, we do not only store the number of flippable stones here, but the complete list
-// of positions of those stones.
+/*! @brief class to represent the "value" of a field of the game-board by means of the number of stones that
+ * will get flipped if a stone of a certain color is placed on that field.
+ *
+ * @details For easier handling, we do not only store the number of flippable stones here, but the complete list
+ * of positions of those stones.
+ */
 
 class FieldValue {
 public:
