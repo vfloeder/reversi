@@ -33,7 +33,7 @@ Reversi::Reversi( int siz )
     {
         for( int j { 0 }; j < m_BoardSize; ++j )
         {
-            m_Board.setField({i, j}, Stone::NoStone);
+            m_Board.setToField({ i, j }, Stone::NoStone);
         }
     }
 
@@ -47,11 +47,11 @@ Reversi::Reversi( int siz )
     // ...  O O O O O O ...
     // ...  ... ... ... ...
 
-    m_Board.setField({m_BoardSize / 2 - 1, m_BoardSize / 2 - 1}, Stone::BlackStone);
-    m_Board.setField({m_BoardSize / 2,     m_BoardSize / 2},     Stone::BlackStone);
+    m_Board.setToField({ m_BoardSize / 2 - 1, m_BoardSize / 2 - 1 }, Stone::BlackStone);
+    m_Board.setToField({ m_BoardSize / 2, m_BoardSize / 2 }, Stone::BlackStone);
     m_BlackStones = 2;
-    m_Board.setField({m_BoardSize / 2 - 1, m_BoardSize / 2},     Stone::WhiteStone);
-    m_Board.setField({m_BoardSize / 2,     m_BoardSize / 2 - 1}, Stone::WhiteStone);
+    m_Board.setToField({ m_BoardSize / 2 - 1, m_BoardSize / 2 }, Stone::WhiteStone);
+    m_Board.setToField({ m_BoardSize / 2, m_BoardSize / 2 - 1 }, Stone::WhiteStone);
     m_WhiteStones = 2;
 }
 
@@ -107,7 +107,7 @@ FieldValue Reversi::checkNeighbor( Pos_Vect toCheck, Pos_Vect direction, Stone s
 
         if( checkStone == oppositStone )
         {
-            ret.addPosition(neighborPos);                                   // might get flipped
+            ret.addValuePosition(neighborPos);                                   // might get flipped
         }
         else if( checkStone == Stone::NoStone )                             // invalid position for "toCheck" for "stone"
         {                                                                   //      regarding "direction"
@@ -130,7 +130,7 @@ FieldValue Reversi::checkNeighbor( Pos_Vect toCheck, Pos_Vect direction, Stone s
 
 void Reversi::setStone( const Pos_Vect& pos, Stone stone )
 {
-    m_Board.setField(pos, stone);
+    m_Board.setToField(pos, stone);
 
     if( Stone::WhiteStone == stone ) ++m_WhiteStones;
     else                             ++m_BlackStones;
@@ -141,7 +141,7 @@ void Reversi::setStone( const Pos_Vect& pos, Stone stone )
 void Reversi::removeStone( const Pos_Vect& pos )
 {
     Stone stone = m_Board.peekField(pos);
-    m_Board.setField(pos, Stone::NoStone);
+    m_Board.setToField(pos, Stone::NoStone);
 
     switch( stone ) {
     case Stone::WhiteStone : --m_WhiteStones; break;
@@ -158,13 +158,13 @@ void Reversi::flipStone( const Pos_Vect& pos )
 
     if( Stone::WhiteStone == stone )
     {
-        m_Board.setField(pos, Stone::BlackStone);
+        m_Board.setToField(pos, Stone::BlackStone);
         --m_WhiteStones;
         ++m_BlackStones;
     }
     else
     {
-        m_Board.setField(pos, Stone::WhiteStone);
+        m_Board.setToField(pos, Stone::WhiteStone);
         --m_BlackStones;
         ++m_WhiteStones;
     }

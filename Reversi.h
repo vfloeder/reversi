@@ -32,14 +32,17 @@
 
 // =====================================================================================================================
 
+/*! @brief basic game implementation
+ *
+ */
 class Reversi
 {
 public:
 
-    // type of stones used to play, for easier handling "no stone" is also used here
-    // so that we assume that each cell/field of the board initially has a "no stone"
-    // type which can be exchanged by another type of stone.
-
+    /*! type of stones used to play, for easier handling "no stone" is also used here
+     * so that we assume that each cell/field of the board initially has a "no stone"
+     * type which can be exchanged by another type of stone.
+     */
     enum class Stone
     {
         BlackStone,
@@ -49,66 +52,126 @@ public:
 
     // =================================================================================================================
 
-    // construct game with a certain board-size
+    /*! @brief construct game with a certain board-size
+     *
+     *  @param siz      size of the board
+     */
     explicit Reversi( int siz );
 
-    // check if game is over (no further move possible)
+    /*! @brief check if game is over (no further move possible)
+     *
+     * @return          true if game is over
+     */
     bool gameOver() const
     { return !m_NumMoves.m_BlackMoves && !m_NumMoves.m_WhiteMoves; }
 
-    // get stone of opposite color
+    /*! @brief get stone of opposite color
+     *
+     * @param stone     stone to get opposite of
+     * @return          stone of opposite color
+     */
     static Stone otherColor( Stone stone );
 
+    /*! @brief iterator
+     *
+     * @return          iterator regaring fields / cells
+     */
     QuadraticBoard<Stone>::Iterator begin()
     { return m_Board.begin(); }
 
+    /*! @brief iterator
+     *
+     * @return          iterator regaring fields / cells
+     */
     QuadraticBoard<Stone>::Iterator end()
     { return m_Board.end(); }
 
-    // check field regarding placed stone
+    /*! @brief check field regarding placed stone
+     *
+     * @param pos       position to check
+     * @return          stone at that position
+     */
     Stone peekField( const Pos_Vect& pos ) const
     { return m_Board.peekField(pos); }
 
-    // put a stone on a board-field
+    /*! @brief put a stone on a board-field
+     *
+     * @param pos       position where to place the stone
+     * @param stone     stone to use
+     */
     void setStone( const Pos_Vect& pos, Stone stone );
 
-    // remove a stone from a field - needed to undo moves
+    /*! @brief remove a stone from a field - needed to undo moves
+     *
+     * @param pos       position
+     */
     void removeStone( const Pos_Vect& pos );
 
-    // flip a stone on a field, so that it gets the "other" color
+    /*! @brief flip a stone on a field, so that it gets the "other" color
+     *
+     * @param pos       position
+     */
     void flipStone( const Pos_Vect& pos );
 
-    // get a complete list of all valid moves for a color at a certain state of the game
-    // returns a list of "FieldValues", containing the position of the move and the list
-    // of positions of stones that will be flipped if the move is choosen.
+    /*! @brief get a complete list of all valid moves for a color at a certain state of the game
+     * @details returns a list of "FieldValues", containing the position of the move and the list
+     * of positions of stones that will be flipped if the move is choosen.
+     * @param stone     stone color to check
+     * @return          list of valid moves (positions to place that stone)
+     */
     FieldList getValidMoves( Stone stone );
 
-    // copy constructor
+    /*! @brief copy constructor
+     *
+     * @param other     game to copy
+     */
     Reversi( const Reversi& other );
 
-    // assignment operator
+    /*! @brief assignment operator
+     *
+     * @param other     game to assign
+     * @return          self-reference
+     */
     Reversi& operator=( const Reversi& other );
 
+    /*! @brief get number of white stones on the board
+     *
+     * @return      number
+     */
     int getWhiteNum() const
     { return m_WhiteStones; }
 
+    /*! @brief get number of black stones on the board
+     *
+     * @return      number
+     */
     int getBlackNum() const
     { return m_BlackStones; }
 
 protected:
 
-    // check neigbours of a stone regarding a certain direction, returning a list of positions of
-    // "captured" stones of the opposite color.
+    /*! @brief check neigbours of a stone regarding a certain direction, returning a list of positions
+     * of "captured" stones of the opposite color.
+     *
+     * @param toCheck       position
+     * @param direction     direction to go
+     * @param stone         stone / color to check
+     * @return              list of "captured" stones if move was made
+     */
     FieldValue checkNeighbor( Pos_Vect toCheck, Pos_Vect direction, Stone stone );
 
-    // store number of possible moves for a particular player (stone) - needed to check if game is over
+    /*! @brief store number of possible moves for a particular player (stone) - needed to check if game is over
+     *
+     * @param stone         stone / color
+     * @param moveNum       currently possible moves
+     */
     void setValidMoveNum( Stone stone, int moveNum );
 
 private:
-    // game is over if neither WHITE nor BLACK can place a stone
+    /// game is over if neither WHITE nor BLACK can place a stone
     struct NumMoves {
-        int     m_WhiteMoves { -1 };
-        int     m_BlackMoves { -1 };
+        int     m_WhiteMoves { -1 };                                        ///< possible moves for white
+        int     m_BlackMoves { -1 };                                        ///< possible moves for black
     };
 
     NumMoves                        m_NumMoves {};                          ///< last number of possible moves per color
@@ -135,7 +198,7 @@ private:
     //                            |
     //                         ( 0,-1)  south
 
-    using ValidDirections = std::vector<Pos_Vect>;
+    using ValidDirections = std::vector<Pos_Vect>;                          ///< type of "valid directions"
     static const ValidDirections    m_Directions;                           ///< allowed directions
 
 };

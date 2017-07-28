@@ -32,7 +32,7 @@ CursesGrid::CursesGrid( TerminalWindow& term, int size )
     {
         for( int y { 0 }; y < m_GridSize; ++y )
         {
-            m_Grid.setField({x,y}, empty);                              // cell initially empty
+            m_Grid.setToField({ x, y }, empty);                              // cell initially empty
         }
     }
 }
@@ -123,7 +123,7 @@ void CursesGrid::setChar( const Pos_Vect& pos, int ch )
     setCursor(pos);
     m_TermWin.taddch(ch);
 
-    m_Grid.setField(pos, ch);
+    m_Grid.setToField(pos, ch);
 
     setCursor(pos);
 }
@@ -219,7 +219,7 @@ void CursesGrid::markCells( const FieldList& fieldList, bool reverse )
 {
     for( const auto& idx : fieldList )
     {
-        const Pos_Vect pos  { idx.getPosition() };
+        const Pos_Vect pos  { idx.getFieldPosition() };
         const int      val  { static_cast<int>(idx.getValue() > 9 ?  '+' : ('0' + idx.getValue())) };
         const int      show { reverse ? static_cast<int>( val | A_REVERSE ) : static_cast<int>( val ) };
 
@@ -235,7 +235,7 @@ void CursesGrid::unmarkCells( const FieldList& fieldList )
 
     for( const auto& idx : fieldList )
     {
-        const Pos_Vect pos { idx.getPosition() };
+        const Pos_Vect pos { idx.getFieldPosition() };
 
         setChar(pos, empty);
     }

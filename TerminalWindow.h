@@ -29,70 +29,93 @@
 
 // =====================================================================================================================
 
-// base class, used to enable printing of objects in the curses window
+/*! @brief base class, used to enable printing of objects in the curses window
+ *
+ */
 class WindowObject
 {
 public:
-    virtual void print() = 0;
+    virtual void print() = 0;                   ///< child needs to implement the printing method
 };
 
 // =====================================================================================================================
 
-// ncurses window to "graphically" view the game-board and information
+/*! @brief  curses window to "graphically" view the game-board and information
+ *
+ */
 class TerminalWindow
 {
 public:
+    /*! @brief constructor
+     *
+     * @param cols      coloumns (x)
+     * @param rows      rows (y)
+     */
     TerminalWindow( int cols, int rows );
 
     ~TerminalWindow();
 
-    // set special char value to mark an "empty field"
+    /*! @brief set special char value to mark an "empty field"
+     *
+     * @param emptyField    char to use
+     */
     void setEmptyChar( int emptyField )
     { m_EmptyField = emptyField; }
 
-    // add an object to the list of self-drawing parts
+    /*! @brief add an object to the list of self-drawing parts
+     *
+     * @param obj       object to print
+     */
     void addObject( WindowObject* obj );
 
-    // initialize the display
+    /*! @brief initialize the display
+     *
+     */
     void initWin();
 
-    // rlease the display
+    /*! @brief release the display
+     *
+     */
     void releaseWin();
 
-    // move cursor to a position
+    /*! @brief move cursor to a position
+     *
+     * @param pos   position
+     */
     void tmove( const Pos_Vect& pos )
     { wmove(m_Win, pos.getY(), pos.getX()); }
 
-    // add (set) a character at the current cursor-position
+    /*! @brief add (set) a character at the current cursor-position
+     *
+     * @param ch    char to set / display for that position
+     */
     void taddch( const int ch )
     { waddch(m_Win, ch); }
 
-    // add a string at the current cursor-position
+    /*! @brief add a string at the current cursor-position
+     *
+     * @param str   string to display
+     */
     void taddstr( const char* str )
     { waddstr(m_Win, str); }
 
+    /*! @brief get the char that is used mark an empty field
+     *
+     * @return      char used to mark an empty field
+     */
     int getEmptyChar() const
     { return m_EmptyField; }
 
-protected:
-#if ! defined(PDCURSES)
-    // set the size of the terminal window
-    void setSize( int cols, int rows );
-
-    // get the size of the terminal window
-    void getSize();
-#endif
-
 private:
-    int                         m_EmptyField;                   // to draw if field empty
-    WINDOW*                     m_Win;                          // ncurses handle
-    int                         m_Cols;                         // coloumns to view
-    int                         m_Rows;                         // rows to view
-    int                         m_OrgCols { -1 };               // number of coloumns of "original" terminal window
-    int                         m_OrgRows { -1 };               //           rows
-    std::vector<WindowObject*>  m_Objects {};                   // list of objects to print
+    int                         m_EmptyField;                   ///< to draw if field empty
+    WINDOW*                     m_Win;                          ///< screen handle
+    int                         m_Cols;                         ///< coloumns to view
+    int                         m_Rows;                         ///< rows to view
+    int                         m_OrgCols { -1 };               ///< number of coloumns of "original" terminal window
+    int                         m_OrgRows { -1 };               ///<           rows
+    std::vector<WindowObject*>  m_Objects {};                   ///< list of objects to print
 
-    static constexpr const int  m_KeyboadTimeoutMs { 50 };      // key-board wait timeout in milliseconds
+    static constexpr const int  m_KeyboadTimeoutMs { 50 };      ///< key-board wait timeout in milliseconds
 
 };
 

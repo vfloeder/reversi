@@ -57,11 +57,11 @@ int GameHandler::getBlackStones() const
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-bool GameHandler::prepareNextMove( Reversi::Stone thisMove, bool view )
+bool GameHandler::prepareNextMove( Reversi::Stone stone, bool view )
 {
-    const bool reverse { Reversi::Stone::WhiteStone == thisMove };
+    const bool reverse { Reversi::Stone::WhiteStone == stone };
 
-    m_validMoves = m_reversi.getValidMoves(thisMove);                               // get list of allowed moves
+    m_validMoves = m_reversi.getValidMoves(stone);                               // get list of allowed moves
 
     if( view )
     {
@@ -73,7 +73,7 @@ bool GameHandler::prepareNextMove( Reversi::Stone thisMove, bool view )
     {
         m_movesIdx = m_validMoves.getBestPos();                                     // get entry with maximum flips
 
-        m_curPos = m_validMoves[m_movesIdx].getPosition();                          // set cursor to max. flips
+        m_curPos = m_validMoves[m_movesIdx].getFieldPosition();                          // set cursor to max. flips
 
         if( view )
             m_gridView.markCell(m_curPos, reverse);
@@ -91,10 +91,10 @@ void GameHandler::selectNextValidMove( Reversi::Stone stone, bool view )
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
     if( view )
-        m_gridView.unmarkCell(m_validMoves[m_movesIdx].getPosition(), reverse);
+        m_gridView.unmarkCell(m_validMoves[m_movesIdx].getFieldPosition(), reverse);
 
     m_movesIdx = ( m_movesIdx + 1 ) % m_validMoves.size();
-    m_curPos   = m_validMoves[m_movesIdx].getPosition();
+    m_curPos   = m_validMoves[m_movesIdx].getFieldPosition();
     if( view )
         m_gridView.markCell(m_curPos, reverse);
 }
@@ -105,22 +105,22 @@ void GameHandler::selectValidMove( Reversi::Stone stone, int idx )
 {
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
-    m_gridView.unmarkCell(m_validMoves[m_movesIdx].getPosition(), reverse);
+    m_gridView.unmarkCell(m_validMoves[m_movesIdx].getFieldPosition(), reverse);
 
     m_movesIdx = idx;
 
-    m_curPos   = m_validMoves[m_movesIdx].getPosition();
+    m_curPos   = m_validMoves[m_movesIdx].getFieldPosition();
     m_gridView.markCell(m_curPos, reverse);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void GameHandler::makeMove( Reversi::Stone thisMove, bool view )
+void GameHandler::makeMove( Reversi::Stone stone, bool view )
 {
     if( view ) m_gridView.unmarkCells(m_validMoves);                                // unmark since decision is made
 
-    m_reversi.setStone(m_curPos, thisMove);                                         // set the stone
-    if( view ) m_gridView.setChar(m_curPos, stone2Char(thisMove));                  // visualize it
+    m_reversi.setStone(m_curPos, stone);                                         // set the stone
+    if( view ) m_gridView.setChar(m_curPos, stone2Char(stone));                  // visualize it
 
     // flip all "won" stones
     for( const auto& j : m_validMoves[m_movesIdx] )
@@ -131,7 +131,7 @@ void GameHandler::makeMove( Reversi::Stone thisMove, bool view )
 
     // store the undo information for this move
     FieldValue  storedMove { m_validMoves[m_movesIdx] };
-    storedMove.setPosition(m_curPos);
+    storedMove.setFieldPosition(m_curPos);
     m_UndoList.push_back(storedMove);
 }
 
@@ -151,7 +151,7 @@ bool GameHandler::undoMove( bool view )
         m_reversi.flipStone(i);
         if( view ) m_gridView.setChar(i, stone2Char(m_reversi.peekField(i)));
     }
-    m_reversi.removeStone(undo.getPosition());
+    m_reversi.removeStone(undo.getFieldPosition());
 
     return true;
 }
@@ -181,7 +181,7 @@ int GameHandler::stone2Char( Reversi::Stone stone )
 // ---------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-int GameHandler::getScore( Reversi::Stone stone )
+int GameHandler::getScore( Reversi::Stone stone ) const
 {
     return Reversi::Stone::WhiteStone == stone
            ? m_reversi.getWhiteNum() - m_reversi.getBlackNum()
@@ -219,7 +219,7 @@ GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int de
         if( score > alpha )
             alpha = score;
 
-        ret.pos = m_validMoves[idx].getPosition();
+        ret.pos = m_validMoves[idx].getFieldPosition();
         ret.idx = idx;
 
         if( m_reversi.gameOver() )

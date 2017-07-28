@@ -47,9 +47,17 @@ public:
         return ret;
     }
 
+    /*! @brief iterator regarding list of Field-Values
+     *
+     * @return      iterator
+     */
     std::vector<FieldValue>::const_iterator begin() const
     { return m_Values.begin(); }
 
+    /*! @brief iterator regarding list of Field-Values
+     *
+     * @return      iterator
+     */
     std::vector<FieldValue>::const_iterator end() const
     { return m_Values.end(); }
 

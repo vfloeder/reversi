@@ -26,50 +26,87 @@
 
 // =====================================================================================================================
 
+/*! @brief quadratic board
+ *
+ * @tparam FieldType    type of each field / cell
+ */
 template<typename FieldType>
 class QuadraticBoard
 {
-    static constexpr const int m_MinBoardSize { 4 };
-    static constexpr const int m_MaxBoardSize { 10 };
+    static constexpr const int m_MinBoardSize { 4 };                        ///< minimum allowed size
+    static constexpr const int m_MaxBoardSize { 10 };                       ///< maximum allowed size
 
 public:
 
-    using BoardOfFields = std::vector<std::vector<FieldType>>;
+    using BoardOfFields = std::vector<std::vector<FieldType>>;              ///< the board type
 
+    /*! @brief special iterator to iterate over the complete board
+     *
+     */
     class Iterator
     {
     public:
+        /*! @brief constructor
+         *
+         * @param board     board to iterate
+         * @param position  current position
+         * @param size      size - number of cells in row and coloumn
+         */
         Iterator( BoardOfFields& board, const Pos_Vect& position, int size );
 
+        /*! @brief de-refencing
+         *
+         * @return      referenced field / cell
+         */
         FieldType& operator*()
         { return m_Board[m_CurPos.getX()][m_CurPos.getY()]; }
 
-        // pre-increment
+        /*! @brief pre-increment
+         *
+         * @return      self-reference
+         */
         Iterator& operator++();
 
+        /*! @brief comparison
+         *
+         * @param it    iterator
+         * @return      true if not equal
+         */
         bool operator!=( const Iterator& it ) const
         { return m_CurPos != it.m_CurPos; }
 
+        /*! @brief get current board-position
+         *
+         * @return      position
+         */
         Pos_Vect getPosition() const
         { return m_CurPos; }
 
     private:
-        BoardOfFields&  m_Board;
-        Pos_Vect        m_CurPos;
-        const int       m_Coloumns;
-        const int       m_Rows;
+        BoardOfFields&  m_Board;                            ///< reference to board
+        Pos_Vect        m_CurPos;                           ///< current position
+        const int       m_Coloumns;                         ///< coloumn-size
+        const int       m_Rows;                             ///< row-size
     };
 
-    // constructor
+    /*! @brief constructor
+     *
+     * @param size      size of board
+     */
     explicit QuadraticBoard( int size );
 
-    // copy constructor
+    /*! @brief copy constructor
+     *
+     * @param b     board to copy
+     */
     QuadraticBoard( const QuadraticBoard& b )
-    {
-        *this = b;
-    }
+    { *this = b; }
 
-    // assignment operator
+    /*! @brief assignment operator
+     *
+     * @param b     board to assign
+     * @return      self-reference
+     */
     QuadraticBoard& operator=( const QuadraticBoard& b )
     {
         if( this != &b )
@@ -87,22 +124,41 @@ public:
         return *this;
     }
 
-    // check if a position is valid, by means of within range of x-coord and y-coord
+    /*! @brief check if a position is valid, by means of within range of x-coord and y-coord
+     *
+     * @param pos       position to check
+     * @return          true if "on the board"
+     */
     bool isValidPostion( const Pos_Vect& pos ) const;
 
-    // get a stone (clone) from a certain position for further analysation
+    /*!  @brief get a stone (clone) from a certain position for further analysation
+     *
+     * @param pos       position / cell to check
+     * @return          stone
+     */
     FieldType peekField( const Pos_Vect& pos ) const
     { return m_Board[pos.getX()][pos.getY()]; }
 
+    /*! @brief begin-operator
+     *
+     * @return          iterator describing the first valid position on the board
+     */
     Iterator begin()
     { return { m_Board, { 0, 0 }, m_BoardSize }; }
 
-    // y moves faster, so x out-of-range marks the end
+    /*! @brief end-operator describing the first invalid position regarding the board (off-board)
+     * y moves faster, so x out-of-range marks the end
+     * @return          iterator "off-board"
+     */
     Iterator end()
     { return { m_Board, { m_BoardSize, 0 }, m_BoardSize }; }
 
-    // put a "stone" on a field at position ...
-    void setField( const Pos_Vect& pos, FieldType stone )
+    /*! @brief put a "stone" on a field at position ...
+     *
+     * @param pos       position of field
+     * @param stone     value / stone to set
+     */
+    void setToField( const Pos_Vect& pos, FieldType stone )
     { m_Board[pos.getX()][pos.getY()] = stone; }
 
 private:

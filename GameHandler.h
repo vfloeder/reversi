@@ -29,69 +29,145 @@
 
 // =====================================================================================================================
 
+/*! @brief game play implementation, all logic is here
+ *
+ */
 class GameHandler
 {
 public:
-    // info to be returned by the next computed move
+    /// @brief info to be returned by the next computed move
     struct MoveInfo {
-        Pos_Vect pos;                                                               // position for stone
-        int      idx;                                                               // index of move in the list of
-                                                                                    //      valids moves
+        Pos_Vect pos;                                                               ///< position for stone
+        int      idx;                                                               ///< index of move in the list of
+                                                                                    ///      valid moves
     };
+
+    /*! @brief constructor
+     *
+     * @param gridView      display
+     * @param reversi       game
+     */
     GameHandler( CursesGrid&  gridView,  Reversi& reversi );
 
-    // game ended?
+    /*! @brief game ended?
+     *
+     * @return      true if game over
+     */
     bool ended() const;
 
-    // get current number of white stones
+    /*! @brief get current number of white stones
+     *
+     * @return      number of white stones on the board
+     */
     int getWhiteStones() const;
 
-    // get number of black stones
+    /*! @brief get number of black stones
+     *
+     * @return      number of black stones on the board
+     */
     int getBlackStones() const;
 
-    // prepare for the next move (calculate possibilities...)
-    bool prepareNextMove( Reversi::Stone thisMove, bool view = true );
+    /*! @brief prepare for the next move (calculate possibilities...)
+     *
+     * @param stone     stone to place
+     * @param view      flag, if true the result shall be shown on the display
+     * @return          true if any move is possible
+     */
+    bool prepareNextMove( Reversi::Stone stone, bool view = true );
 
-    // move cursor (selection) to the next possibility
-    void selectNextValidMove( Reversi::Stone thisMove, bool view = true );
+    /*! @brief set selection of move to the next possibility, iterating of the list of possible moves
+     *
+     * @param stone     stone to place
+     * @param view      flag, if true the result shall be shown on the display
+     */
+    void selectNextValidMove( Reversi::Stone stone, bool view = true );
 
-    // set to dedicated position - used for computed moves
+    /*! @brief set to dedicated position - used for computed moves
+     *
+     * @param stone     stone to place
+     * @param idx       index into list of possible moves
+     */
     void selectValidMove( Reversi::Stone stone, int idx );
 
-    // select a cursor-position, making that move
-    void makeMove( Reversi::Stone  thisMove, bool view = true );
+    /*! @brief select a stone position, making the move
+     *
+     * @param stone     stone to place
+     * @param view      flag, if true the result shall be shown on the display
+     */
+    void makeMove( Reversi::Stone  stone, bool view = true );
 
-    // undo the last move
+    /*! @brief undo the last move
+     *
+     * @param view      flag, if true the result shall be shown on the display
+     * @return
+     */
     bool undoMove( bool view = true );
 
-    // get possible flips for a position
+    /*! @brief get possible flips for the position of a move
+     *
+     * @return          number of possible flips (catches)
+     */
     int getPossibleFlips();
 
-    // compute a "good" next move by analysing all possibilities down to a certain depth
+    /*! @brief compute a "good" next move by analysing all possibilities down to a certain depth, does an alpha-beta search
+     *
+     * @param stone     stone to place
+     * @param depth     calculation depth - analyzing all moves up to that depth
+     * @return          move-info : position of stone and index of that move in the list of possible moves
+     */
     MoveInfo computeNextMove( Reversi::Stone stone, int depth );
 
+    /*! @brief cancel the calculation of the next move
+     *
+     */
     void stop()
     { m_stopCalculation = true; }
 
 protected:
-    // get char to display for certain stone
+    /*! qbrief get char to display for certain stone
+     *
+     * @param stone     stone to show
+     * @return          character tp display
+     */
     static int stone2Char( Reversi::Stone stone );
 
-    int      getScore( Reversi::Stone stone );
+    /*! @brief get current score of the game regarding a stone
+     *
+     * @param stone     stone to check
+     * @return          score
+     */
+    int      getScore( Reversi::Stone stone ) const;
 
+    /*! @brief get max score
+     *
+     * @param stone     stone to check
+     * @param depth     max depth regarding analyzation
+     * @param alpha     player-score regarding stone
+     * @param beta      score regarding opponent
+     * @return
+     */
     int      maxScore( Reversi::Stone stone, int depth, int alpha, int beta );
+
+    /*! @brief get min score
+     *
+     * @param stone     stone to check
+     * @param depth     max depth regarding analyzation
+     * @param alpha     player-score regarding stone
+     * @param beta      score regarding opponent
+     * @return
+     */
     int      minScore( Reversi::Stone stone, int depth, int alpha, int beta );
 
 private:
 
-    CursesGrid&  m_gridView;                                                    // display
-    Reversi&     m_reversi;                                                     // gaming engine
-    Pos_Vect     m_curPos{ 0, 0 };                                              // current position
-    int          m_movesIdx { 0 };                                              // current index regarding valid moves
-    FieldList    m_validMoves {};                                               // list of valid moves
-    FieldList    m_UndoList {};                                                 // to undo the moves
+    CursesGrid&         m_gridView;                                     ///< display
+    Reversi&            m_reversi;                                      ///< gaming engine
+    Pos_Vect            m_curPos{ 0, 0 };                               ///< current position
+    int                 m_movesIdx { 0 };                               ///< current index regarding valid moves
+    FieldList           m_validMoves {};                                ///< list of valid moves
+    FieldList           m_UndoList {};                                  ///< to undo the moves
 
-    std::atomic<bool>           m_stopCalculation { false };
+    std::atomic<bool>   m_stopCalculation { false };                    ///< stop-flag
 };
 
 #endif //GAMEHANDLER_H
