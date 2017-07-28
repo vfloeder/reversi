@@ -18,8 +18,11 @@
 #ifndef REVERSI_H
 #define REVERSI_H
 
-/*! @mainpage This is how the game is implemented
- * \image html class-diagram.png
+/*! @mainpage Reversi with <b><em>pdcurses</em></b> gui
+ * A typical screen looks like this:
+ * @image html PDCurses_005.png
+ * and here is a diagram of how the game is implemented:
+ * @image html class-diagram.png
  *
  */
 
