@@ -18,6 +18,11 @@
 #ifndef REVERSI_H
 #define REVERSI_H
 
+/*! @mainpage This is how the game is implemented
+ * \image html class-diagram.png
+ *
+ */
+
 #include <array>
 #include <vector>
 #include <cstddef>
