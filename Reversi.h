@@ -156,6 +156,12 @@ public:
     int getBlackNum() const
     { return m_BlackStones; }
 
+    /*! @brief get the number of fields
+     *
+     * @return      number of cells
+     */
+    int getBoardSize() const
+    { return m_BoardSize * m_BoardSize; }
 protected:
 
     /*! @brief check neigbours of a stone regarding a certain direction, returning a list of positions

@@ -244,8 +244,9 @@ int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
     prepareNextMove(stone, false);
 
-    const int validMoves { static_cast<int>(m_validMoves.size()) };
-    int       idx { 0 };
+    const int   validMoves { static_cast<int>(m_validMoves.size()) };
+    int         idx { 0 };
+    int         bestScore { -m_reversi.getBoardSize() };
 
     while( idx < validMoves )
     {
@@ -258,16 +259,18 @@ int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta 
         undoMove(false);
         prepareNextMove(stone, false);
 
-        alpha = std::max(alpha, score);
+        bestScore = std::max(bestScore, score);
+
+        alpha = std::max(alpha, bestScore);
 
         if( alpha >= beta )
-            return beta;
+            break;
 
         selectNextValidMove(stone, false);
 
         ++idx;
     }
-    return alpha;
+    return bestScore;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -282,8 +285,9 @@ int GameHandler::minScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
     prepareNextMove(stone, false);
 
-    const int validMoves { static_cast<int>(m_validMoves.size()) };
-    int       idx { 0 };
+    const int   validMoves { static_cast<int>(m_validMoves.size()) };
+    int         idx { 0 };
+    int         bestScore { m_reversi.getBoardSize() };
 
     while( idx < validMoves )
     {
@@ -296,14 +300,16 @@ int GameHandler::minScore( Reversi::Stone stone, int depth, int alpha, int beta 
         undoMove(false);
         prepareNextMove(stone, false);
 
-        beta = std::min(beta, score);
+        bestScore = std::min(bestScore, score);
+
+        beta = std::min(beta, bestScore);
 
         if( alpha >= beta )
-            return alpha;
+            break;
 
         selectNextValidMove(stone, false);
 
         ++idx;
     }
-    return beta;
+    return bestScore;
 }
