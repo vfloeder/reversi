@@ -17,7 +17,27 @@
 
 // =====================================================================================================================
 
-/// @brief "grid" view object to be shown via curses
+/*! @brief "grid" view object to be shown via curses
+ * @details The class implements a grid display via curses, such that a status-line, the numbering of columns and rows and
+ * some cell-separators are shown.
+ *
+ * It contains:
+ * - the grid of characters to display
+ * - the size of the grid
+ * - a reference to the terminal window used for display
+ * - horizontal and vertical offsets for the display - to make room for additional information to be displayed
+ *
+ * It implements:
+ * - printing a status line
+ * - printing a help text
+ * - marking a cell
+ * - unmarking a cell
+ * - setting the display character for a sell - the cell-value
+ * - printing itself via the terminal
+ * - marking a list of cells
+ * - unmarking a list of cells
+ *
+ */
 class CursesGrid : public WindowObject
 {
 public:

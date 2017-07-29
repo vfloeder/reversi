@@ -30,6 +30,24 @@
 
 /*! @brief basic game implementation
  *
+ * @details This is the basic "Reversi" Engine.
+ *
+ * It contains
+ * - a board
+ * - the definition of valid directions for moves (to check if opposite stones can be catured regarding that direction)
+ * - the last number of possible moves per player (to chek if the game is over)
+ * - the number of white / black stones on the board
+ *
+ * here we have functions to
+ * - check if the game is over
+ * - get an "opposite" stone regarding a certain color
+ * - check what is on a certain field (no stone, white, black)
+ * - set a stone
+ * - remove a stone
+ * - flip a stone
+ * - get a list of valid moves - including captures stones
+ *
+ * So this class implements the very basic rules regarding the game.
  */
 class Reversi
 {

@@ -29,7 +29,18 @@ public:
 // =====================================================================================================================
 
 /*! @brief  curses window to "graphically" view the game-board and information
+ * @details This is the "outer part" of the graphic abstraction, it handles the basic curses functionality and maintains
+ * a list of printable objects and the special character-code that will be displayed for empty fields of the board.
  *
+ * Here you can
+ * - set and get the "empty char"
+ * - add a display object
+ * - initialize and release the display
+ * - set the output position, where the next char is shown
+ * - output a single character
+ * - output a string
+ *
+ * Additionally, the keyboard timeout is set.
  */
 class TerminalWindow
 {

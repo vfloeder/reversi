@@ -8,9 +8,19 @@
 
 // =====================================================================================================================
 
-/*! @details position / vector / direction on the board
- * used for easier analysation of possible moves since both actual position and "looking" direction
- * can be coded as a Pos_Vect, which can be easily added and substracted.
+/*! @brief position / vector / direction on the board
+ * @details This class is used for easier analysation of possible moves since both actual position and
+ * "looking" direction can be coded as a Pos_Vect, which can be easily added and substracted.
+ *
+ * It contains
+ * - the coordinates
+ *
+ * It implements
+ * - assignment
+ * - addition
+ * - substraction
+ * - comparison
+ * - getter
  */
 
 class Pos_Vect

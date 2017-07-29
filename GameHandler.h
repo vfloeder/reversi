@@ -17,8 +17,29 @@
 
 // =====================================================================================================================
 
-/*! @brief game play implementation, all logic is here
+/*! @brief game play implementation, all the logic is here
+ * @details  The GameHandler class act on the Reversi and the GridView class. It implements the game logic and it make sure that
+ * the current state of the game is displayed on the screen. However, it also contains logic to <b>not</b> display
+ * intermediate calculation steps that might be done on the Reversi class.
  *
+ * it contains:
+ * - a refence to the Reversi class
+ * - a reference to the Grid view class
+ * - the current position regarding a move-selection
+ * - a lsit of valid moves for a time
+ * - an undo list, to undo all done moves
+ *
+ * it implements:
+ * - a check if the game has ended
+ * - get the number of white/black stones currently on the board
+ * - preparing the next move (get the list of legal moves)
+ * - select one from the list of possible next moves
+ * - making a move
+ * - undo a move
+ * - get the possible flips for a selected move
+ * - compute the best next move
+ * The computation of the best next move is done via a min-max algorithm that computes all moves down to a
+ * certain depth. This is done via an async thread that may be forced to stop by a user input.
  */
 class GameHandler
 {

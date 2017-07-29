@@ -10,7 +10,21 @@
 
 // =====================================================================================================================
 
-/// @brief list of field-values (which is a list as well), used to store the currently possible moves for the game
+/*! @brief list of field-values (which is a list as well), used to store the currently possible moves for the game
+ * @details Not much surprises here.
+ * It contains
+ * - list of field-values
+ *
+ * It implements some access funtions:
+ * - iteratore over the list
+ * - get number of lists
+ * - access a certain list
+ * - get index of list with highest score (max number of flips)
+ * - add a list at the end
+ * - access last list
+ * - remove last list
+ *
+ */
 
 class FieldList {
 public:

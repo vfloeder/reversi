@@ -18,6 +18,17 @@
  *
  * @details For easier handling, we do not only store the number of flippable stones here, but the complete list
  * of positions of those stones.
+ *
+ * This class contains
+ * - position of the field
+ * - a vector of positions of fields that can be "flipped"
+ *
+ * It implements:
+ * - getter/setter for the position
+ * - getting the "value" by means of number of possible flips
+ * - adding a single position of a possible flip
+ * - deleting all possible flips - used if a chain of stones isn't surrounded by an own stone
+ * - adding a complete list of possible flips - used to combine different directions
  */
 
 class FieldValue {
@@ -44,7 +55,7 @@ public:
     void setFieldPosition( const Pos_Vect& pos )
     { m_position = pos; }
 
-    /*! @brief get the "value" by menas of the number of possible flips
+    /*! @brief get the "value" by means of the number of possible flips
      *
      * @return          value
      */

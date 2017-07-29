@@ -15,6 +15,17 @@
 // =====================================================================================================================
 
 /*! @brief quadratic board
+ * @details  This is a N x N board / grid with a certain type of cells that are supplied by template-parameter. It is used
+ * for the Reversi-Board and for the Grid-Dispaly as well.
+ *
+ * It contains
+ * - the size of the board
+ * - the cells
+ *
+ * It implements an own iterator and it has functions to
+ * - check if a position is on the board (the coordinates are within range)
+ * - have a look on a certain field/cell
+ * - set a value (stone, char) of a field/cell
  *
  * @tparam FieldType    type of each field / cell
  */
