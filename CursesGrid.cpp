@@ -7,7 +7,7 @@
 
 // =====================================================================================================================
 
-CursesGrid::CursesGrid( TerminalWindow& term, int size )
+CursesGrid::CursesGrid( TerminalWindow& term, const int size )
     : m_HorOffset { 3 }
     , m_VertOffset { 1 }
     , m_TermWin { term }
@@ -66,7 +66,7 @@ void CursesGrid::setCursor( const Pos_Vect& pos )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::markCell( const Pos_Vect& pos, bool reverse )
+void CursesGrid::markCell( const Pos_Vect& pos, const bool reverse )
 {
     int newChar { m_Grid.peekField(pos) };
 
@@ -86,7 +86,7 @@ void CursesGrid::markCell( const Pos_Vect& pos, bool reverse )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::unmarkCell( const Pos_Vect& pos, bool reverse )
+void CursesGrid::unmarkCell( const Pos_Vect& pos, const bool reverse )
 {
     int newChar { m_Grid.peekField(pos) };
 
@@ -106,7 +106,7 @@ void CursesGrid::unmarkCell( const Pos_Vect& pos, bool reverse )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::setChar( const Pos_Vect& pos, int ch )
+void CursesGrid::setChar( const Pos_Vect& pos, const int ch )
 {
     setCursor(pos);
     m_TermWin.taddch(ch);
@@ -118,9 +118,8 @@ void CursesGrid::setChar( const Pos_Vect& pos, int ch )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void CursesGrid::print()
+void CursesGrid::print() const
 {
-    std::stringstream sstr;
     const int         numCols  { m_GridSize };
     const int         numLines { m_GridSize };
 
@@ -203,7 +202,7 @@ void CursesGrid::print()
 // ---------------------------------------------------------------------------------------------------------------------
 
 // we can only print values 1 .. 9, for larger values we print a '+' instead
-void CursesGrid::markCells( const FieldList& fieldList, bool reverse )
+void CursesGrid::markCells( const FieldList& fieldList, const bool reverse )
 {
     for( const auto& idx : fieldList )
     {

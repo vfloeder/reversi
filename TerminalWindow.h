@@ -23,7 +23,7 @@
 class WindowObject
 {
 public:
-    virtual void print() = 0;                   ///< child needs to implement the printing method
+    virtual void print() const = 0;                   ///< child needs to implement the printing method
 };
 
 // =====================================================================================================================
@@ -39,7 +39,7 @@ public:
      * @param cols      coloumns (x)
      * @param rows      rows (y)
      */
-    TerminalWindow( int cols, int rows );
+    TerminalWindow( const int cols, const int rows );
 
     ~TerminalWindow();
 
@@ -47,14 +47,14 @@ public:
      *
      * @param emptyField    char to use
      */
-    void setEmptyChar( int emptyField )
+    void setEmptyChar( const int emptyField )
     { m_EmptyField = emptyField; }
 
     /*! @brief add an object to the list of self-drawing parts
      *
      * @param obj       object to print
      */
-    void addObject( WindowObject* obj );
+    void addObject( const WindowObject* obj );
 
     /*! @brief initialize the display
      *
@@ -100,7 +100,7 @@ private:
     int                         m_Cols;                         ///< coloumns to view
     int                         m_Rows;                         ///< rows to view
 
-    std::vector<WindowObject*>  m_Objects {};                   ///< list of objects to print
+    std::vector<const WindowObject*>  m_Objects {};             ///< list of objects to print
 
     static constexpr const int  m_KeyboadTimeoutMs { 50 };      ///< key-board wait timeout in milliseconds
 

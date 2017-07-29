@@ -143,7 +143,7 @@ private:
 // ---------------------------------------------------------------------------------------------------------------------
 
 template< typename FieldType>
-QuadraticBoard<FieldType>::Iterator::Iterator( BoardOfFields& board, const Pos_Vect& position, int size )
+QuadraticBoard<FieldType>::Iterator::Iterator( BoardOfFields& board, const Pos_Vect& position, const int size )
 : m_Board { board }
 , m_CurPos { position }
 , m_Coloumns { size }
@@ -171,7 +171,7 @@ QuadraticBoard<FieldType>::Iterator::operator++()
 // =====================================================================================================================
 
 template< typename FieldType>
-QuadraticBoard<FieldType>::QuadraticBoard( int size )
+QuadraticBoard<FieldType>::QuadraticBoard( const int size )
     : m_BoardSize { size }
     , m_Board { static_cast<size_t>(m_BoardSize), std::vector<FieldType>(m_BoardSize) }
 {

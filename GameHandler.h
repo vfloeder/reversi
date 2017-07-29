@@ -61,35 +61,35 @@ public:
      * @param view      flag, if true the result shall be shown on the display
      * @return          true if any move is possible
      */
-    bool prepareNextMove( Reversi::Stone stone, bool view = true );
+    bool prepareNextMove( const Reversi::Stone stone, const bool view = true );
 
     /*! @brief set selection of move to the next possibility, iterating of the list of possible moves
      *
      * @param stone     stone to place
      * @param view      flag, if true the result shall be shown on the display
      */
-    void selectNextValidMove( Reversi::Stone stone, bool view = true );
+    void selectNextValidMove( const Reversi::Stone stone, const bool view = true );
 
     /*! @brief set to dedicated position - used for computed moves
      *
      * @param stone     stone to place
      * @param idx       index into list of possible moves
      */
-    void selectValidMove( Reversi::Stone stone, int idx );
+    void selectValidMove( const Reversi::Stone stone, const int idx );
 
     /*! @brief select a stone position, making the move
      *
      * @param stone     stone to place
      * @param view      flag, if true the result shall be shown on the display
      */
-    void makeMove( Reversi::Stone  stone, bool view = true );
+    void makeMove( const Reversi::Stone  stone, const bool view = true );
 
     /*! @brief undo the last move
      *
      * @param view      flag, if true the result shall be shown on the display
      * @return
      */
-    bool undoMove( bool view = true );
+    bool undoMove( const bool view = true );
 
     /*! @brief get possible flips for the position of a move
      *
@@ -103,7 +103,7 @@ public:
      * @param depth     calculation depth - analyzing all moves up to that depth
      * @return          move-info : position of stone and index of that move in the list of possible moves
      */
-    MoveInfo computeNextMove( Reversi::Stone stone, int depth );
+    MoveInfo computeNextMove( const Reversi::Stone stone, const int depth );
 
     /*! @brief cancel the calculation of the next move
      *
@@ -117,14 +117,14 @@ protected:
      * @param stone     stone to show
      * @return          character tp display
      */
-    static int stone2Char( Reversi::Stone stone );
+    static int stone2Char( const Reversi::Stone stone );
 
     /*! @brief get current score of the game regarding a stone
      *
      * @param stone     stone to check
      * @return          score
      */
-    int      getScore( Reversi::Stone stone ) const;
+    int      getScore( const Reversi::Stone stone ) const;
 
     /*! @brief get max score
      *
@@ -134,7 +134,7 @@ protected:
      * @param beta      score regarding opponent
      * @return
      */
-    int      maxScore( Reversi::Stone stone, int depth, int alpha, int beta );
+    int      maxScore( const Reversi::Stone stone, const int depth, int alpha, const int beta );
 
     /*! @brief get min score
      *
@@ -144,7 +144,7 @@ protected:
      * @param beta      score regarding opponent
      * @return
      */
-    int      minScore( Reversi::Stone stone, int depth, int alpha, int beta );
+    int      minScore( const Reversi::Stone stone, const int depth, const int alpha, int beta );
 
 private:
 

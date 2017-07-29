@@ -25,7 +25,7 @@ public:
      * @param x     x coordinate
      * @param y     y coordinate
      */
-    Pos_Vect( int x, int y )
+    Pos_Vect( const int x, const int y )
         : m_x { x }
         , m_y { y }
     {}
@@ -45,7 +45,7 @@ public:
      * @param toAdd     vector to add
      * @return          resulting vector
      */
-    Pos_Vect operator+( const Pos_Vect& toAdd )
+    Pos_Vect operator+( const Pos_Vect& toAdd ) const
     {
         Pos_Vect ret { m_x + toAdd.m_x, m_y + toAdd.m_y };
 

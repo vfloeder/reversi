@@ -52,7 +52,7 @@ public:
      *
      *  @param siz      size of the board
      */
-    explicit Reversi( int siz );
+    explicit Reversi( const int siz );
 
     /*! @brief check if game is over (no further move possible)
      *
@@ -66,7 +66,7 @@ public:
      * @param stone     stone to get opposite of
      * @return          stone of opposite color
      */
-    static Stone otherColor( Stone stone );
+    static Stone otherColor( const Stone stone );
 
     /*! @brief iterator
      *
@@ -95,7 +95,7 @@ public:
      * @param pos       position where to place the stone
      * @param stone     stone to use
      */
-    void setStone( const Pos_Vect& pos, Stone stone );
+    void setStone( const Pos_Vect& pos, const Stone stone );
 
     /*! @brief remove a stone from a field - needed to undo moves
      *
@@ -115,7 +115,7 @@ public:
      * @param stone     stone color to check
      * @return          list of valid moves (positions to place that stone)
      */
-    FieldList getValidMoves( Stone stone );
+    FieldList getValidMoves( const Stone stone );
 
     /*! @brief copy constructor
      *
@@ -160,14 +160,14 @@ protected:
      * @param stone         stone / color to check
      * @return              list of "captured" stones if move was made
      */
-    FieldValue checkNeighbor( Pos_Vect toCheck, Pos_Vect direction, Stone stone );
+    FieldValue checkNeighbor( const Pos_Vect toCheck, const Pos_Vect direction, const Stone stone ) const;
 
     /*! @brief store number of possible moves for a particular player (stone) - needed to check if game is over
      *
      * @param stone         stone / color
      * @param moveNum       currently possible moves
      */
-    void setValidMoveNum( Stone stone, int moveNum );
+    void setValidMoveNum( const Stone stone, const int moveNum );
 
 private:
     /// game is over if neither WHITE nor BLACK can place a stone

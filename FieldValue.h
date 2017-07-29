@@ -34,7 +34,7 @@ public:
      *
      * @return      position
      */
-    Pos_Vect getFieldPosition() const
+    const Pos_Vect getFieldPosition() const
     { return m_position; }
 
     /*! @brief set position

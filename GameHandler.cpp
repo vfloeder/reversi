@@ -45,7 +45,7 @@ int GameHandler::getBlackStones() const
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-bool GameHandler::prepareNextMove( Reversi::Stone stone, bool view )
+bool GameHandler::prepareNextMove( const Reversi::Stone stone, const bool view )
 {
     const bool reverse { Reversi::Stone::WhiteStone == stone };
 
@@ -74,7 +74,7 @@ bool GameHandler::prepareNextMove( Reversi::Stone stone, bool view )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void GameHandler::selectNextValidMove( Reversi::Stone stone, bool view )
+void GameHandler::selectNextValidMove( const Reversi::Stone stone, const bool view )
 {
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
@@ -89,7 +89,7 @@ void GameHandler::selectNextValidMove( Reversi::Stone stone, bool view )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void GameHandler::selectValidMove( Reversi::Stone stone, int idx )
+void GameHandler::selectValidMove( const Reversi::Stone stone, const int idx )
 {
     const bool reverse { stone == Reversi::Stone::WhiteStone ? true : false };
 
@@ -103,7 +103,7 @@ void GameHandler::selectValidMove( Reversi::Stone stone, int idx )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void GameHandler::makeMove( Reversi::Stone stone, bool view )
+void GameHandler::makeMove( const Reversi::Stone stone, const bool view )
 {
     if( view ) m_gridView.unmarkCells(m_validMoves);                                // unmark since decision is made
 
@@ -125,7 +125,7 @@ void GameHandler::makeMove( Reversi::Stone stone, bool view )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-bool GameHandler::undoMove( bool view )
+bool GameHandler::undoMove( const bool view )
 {
     if( !m_UndoList.size() ) return false;
 
@@ -155,7 +155,7 @@ int GameHandler::getPossibleFlips()
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-int GameHandler::stone2Char( Reversi::Stone stone )
+int GameHandler::stone2Char( const Reversi::Stone stone )
 {
     switch( stone )
     {
@@ -169,7 +169,7 @@ int GameHandler::stone2Char( Reversi::Stone stone )
 // ---------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 
-int GameHandler::getScore( Reversi::Stone stone ) const
+int GameHandler::getScore( const Reversi::Stone stone ) const
 {
     return Reversi::Stone::WhiteStone == stone
            ? m_reversi.getWhiteNum() - m_reversi.getBlackNum()
@@ -180,7 +180,7 @@ int GameHandler::getScore( Reversi::Stone stone ) const
 
 // currently limited by depth but should rather be limited by time
 
-GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int depth )
+GameHandler::MoveInfo GameHandler::computeNextMove( const Reversi::Stone stone, const int depth )
 {
     MoveInfo    ret { {-1, -1}, -1 };
     int         alpha { -m_reversi.getBoardSize() };
@@ -198,7 +198,8 @@ GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int de
         if( m_stopCalculation ) break;
 
         makeMove(stone, false);                                                     // make this move
-        const int score { minScore(stone, depth - 1, alpha, beta) };                // calculate min score
+
+        const int score { minScore(Reversi::otherColor(stone), depth - 1, alpha, beta) };  // calculate min score
 
         undoMove(false);                                                            // undo the move
         prepareNextMove(stone, false);                                              // prepare for the next move
@@ -221,7 +222,7 @@ GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int de
 // ---------------------------------------------------------------------------------------------------------------------
 // heuristic https://kartikkukreja.wordpress.com/2013/03/30/heuristic-function-for-reversiothello/
 
-int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta )
+int GameHandler::maxScore( const Reversi::Stone stone, const int depth, int alpha, const int beta )
 {
     if( m_reversi.gameOver() )
         return getScore(stone);
@@ -241,7 +242,7 @@ int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
         makeMove(stone, false);
 
-        const int score = minScore(stone, depth - 1, alpha, beta);
+        const int score = minScore(Reversi::otherColor(stone), depth - 1, alpha, beta);
 
         undoMove(false);
         prepareNextMove(stone, false);
@@ -262,7 +263,7 @@ int GameHandler::maxScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-int GameHandler::minScore( Reversi::Stone stone, int depth, int alpha, int beta )
+int GameHandler::minScore( const Reversi::Stone stone, const int depth, const int alpha, int beta )
 {
     if( m_reversi.gameOver() )
         return getScore(stone);
@@ -282,7 +283,7 @@ int GameHandler::minScore( Reversi::Stone stone, int depth, int alpha, int beta 
 
         makeMove(stone, false);
 
-        const int score = maxScore(stone, depth - 1, alpha, beta);
+        const int score = maxScore(Reversi::otherColor(stone), depth - 1, alpha, beta);
 
         undoMove(false);
         prepareNextMove(stone, false);

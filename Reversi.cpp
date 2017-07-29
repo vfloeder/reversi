@@ -13,7 +13,7 @@ const Reversi::ValidDirections
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-Reversi::Reversi( int siz )
+Reversi::Reversi( const int siz )
     : m_BoardSize{siz}
     , m_Board{siz}
 {
@@ -71,7 +71,7 @@ Reversi& Reversi::operator=( const Reversi& other )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-Reversi::Stone Reversi::otherColor( Reversi::Stone stone )
+Reversi::Stone Reversi::otherColor( const Reversi::Stone stone )
 {
     if( stone == Stone::NoStone )
     {
@@ -83,7 +83,7 @@ Reversi::Stone Reversi::otherColor( Reversi::Stone stone )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-FieldValue Reversi::checkNeighbor( Pos_Vect toCheck, Pos_Vect direction, Stone stone )
+FieldValue Reversi::checkNeighbor( const Pos_Vect toCheck, const Pos_Vect direction, const Stone stone ) const
 {
     Pos_Vect    neighborPos  { toCheck + direction };                       // neighbor to check
     const Stone oppositStone { otherColor(stone) };                         // look for those
@@ -160,7 +160,7 @@ void Reversi::flipStone( const Pos_Vect& pos )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-FieldList Reversi::getValidMoves( Stone stone )
+FieldList Reversi::getValidMoves( const Stone stone )
 {
     FieldList validMoves {};
 
@@ -199,7 +199,7 @@ FieldList Reversi::getValidMoves( Stone stone )
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void Reversi::setValidMoveNum( Stone stone, int moveNum )
+void Reversi::setValidMoveNum( const Stone stone, const int moveNum )
 {
     if( Stone::WhiteStone == stone )
     {

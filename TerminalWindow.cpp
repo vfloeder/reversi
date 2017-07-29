@@ -10,7 +10,7 @@
 
 // =====================================================================================================================
 
-TerminalWindow::TerminalWindow( int cols, int rows )
+TerminalWindow::TerminalWindow( const int cols, const int rows )
     : m_EmptyField{ ' ' }
     , m_Cols { cols }
     , m_Rows { rows }
@@ -39,7 +39,7 @@ TerminalWindow::~TerminalWindow()
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-void TerminalWindow::addObject( WindowObject* obj )
+void TerminalWindow::addObject( const WindowObject* obj )
 {
     m_Objects.push_back(obj);
     refresh();

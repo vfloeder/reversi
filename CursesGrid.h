@@ -26,7 +26,9 @@ public:
      * @param term      terminal window (curses) used for display
      * @param size      size of the grid - N x N coloumns and rows
      */
-    CursesGrid( TerminalWindow& term, int size );
+    CursesGrid( TerminalWindow& term, const int size );
+
+    virtual ~CursesGrid() = default;
 
     /*! @brief print a line containing varius information
      *
@@ -51,33 +53,33 @@ public:
      * @param pos       position of cell
      * @param reverse   revert fore- and back-ground color
      */
-    void markCell( const Pos_Vect& pos, bool reverse );
+    void markCell( const Pos_Vect& pos, const bool reverse );
 
     /*! @brief unmark a specific cell
      *
      * @param pos       position of cell
      * @param reverse   revert fore- and back-ground color
      */
-    void unmarkCell( const Pos_Vect& pos, bool reverse );
+    void unmarkCell( const Pos_Vect& pos, const bool reverse );
 
     /*! @brief set the character of a cell at a position
      *
      * @param pos       position
      * @param ch        character to display
      */
-    void setChar( const Pos_Vect& pos, int ch );
+    void setChar( const Pos_Vect& pos, const int ch );
 
     /*! @brief print the grid using the terminal supplied via the constructor
      *
      */
-    void print();
+    void print() const;
 
     /*! @brief mark one or more grid-cells, by displaying a special character
      *
      * @param fieldList     list of positions
      * @param reverse       revert fore- and back-ground color
      */
-    void markCells( const FieldList& fieldList, bool reverse );
+    void markCells( const FieldList& fieldList, const bool reverse );
 
     /*! @brief remove all marks from the currently marked cells
      *
