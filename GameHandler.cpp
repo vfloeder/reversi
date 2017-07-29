@@ -2,18 +2,6 @@
 // Copyright (c) 2017 Volker Floeder
 // All rights reserved.
 //
-// Redistribution and use in source and binary forms are permitted
-// provided that the above copyright notice and this paragraph are
-// duplicated in all such forms and that any documentation,
-// advertising materials, and other materials related to such
-// distribution and use acknowledge that the software was developed
-// by Volker Floeder. The name of Volker Floeder may not be used
-// to endorse or promote products derived from this software without
-// specific prior written permission.
-// THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
 
 #include "GameHandler.h"
 
@@ -61,7 +49,7 @@ bool GameHandler::prepareNextMove( Reversi::Stone stone, bool view )
 {
     const bool reverse { Reversi::Stone::WhiteStone == stone };
 
-    m_validMoves = m_reversi.getValidMoves(stone);                               // get list of allowed moves
+    m_validMoves = m_reversi.getValidMoves(stone);                                  // get list of allowed moves
 
     if( view )
     {
@@ -73,7 +61,7 @@ bool GameHandler::prepareNextMove( Reversi::Stone stone, bool view )
     {
         m_movesIdx = m_validMoves.getBestPos();                                     // get entry with maximum flips
 
-        m_curPos = m_validMoves[m_movesIdx].getFieldPosition();                          // set cursor to max. flips
+        m_curPos = m_validMoves[m_movesIdx].getFieldPosition();                     // set cursor to max. flips
 
         if( view )
             m_gridView.markCell(m_curPos, reverse);
@@ -119,8 +107,8 @@ void GameHandler::makeMove( Reversi::Stone stone, bool view )
 {
     if( view ) m_gridView.unmarkCells(m_validMoves);                                // unmark since decision is made
 
-    m_reversi.setStone(m_curPos, stone);                                         // set the stone
-    if( view ) m_gridView.setChar(m_curPos, stone2Char(stone));                  // visualize it
+    m_reversi.setStone(m_curPos, stone);                                            // set the stone
+    if( view ) m_gridView.setChar(m_curPos, stone2Char(stone));                     // visualize it
 
     // flip all "won" stones
     for( const auto& j : m_validMoves[m_movesIdx] )
@@ -195,26 +183,25 @@ int GameHandler::getScore( Reversi::Stone stone ) const
 GameHandler::MoveInfo GameHandler::computeNextMove( Reversi::Stone stone, int depth )
 {
     MoveInfo    ret { {-1, -1}, -1 };
-    int         alpha { -1000 };
-    const int   beta { 1000 };
+    int         alpha { -m_reversi.getBoardSize() };
+    const int   beta { m_reversi.getBoardSize() };
 
-    m_stopCalculation = false;
+    m_stopCalculation = false;                                                      // assume to keep working
 
-    prepareNextMove(stone, false);
+    prepareNextMove(stone, false);                                                  // prepare game info regarding move
 
-    const int validMoves { static_cast<int>(m_validMoves.size()) };
+    const int validMoves { static_cast<int>(m_validMoves.size()) };                 // get number of possible moves
     int idx { 0 };
 
-    while( idx < validMoves )
+    while( idx < validMoves )                                                       // iterate over them
     {
         if( m_stopCalculation ) break;
 
-        makeMove(stone, false);
+        makeMove(stone, false);                                                     // make this move
+        const int score { minScore(stone, depth - 1, alpha, beta) };                // calculate min score
 
-        const int score { minScore(stone, depth - 1, alpha, beta) };
-
-        undoMove(false);
-        prepareNextMove(stone, false);
+        undoMove(false);                                                            // undo the move
+        prepareNextMove(stone, false);                                              // prepare for the next move
 
         if( score > alpha )
             alpha = score;

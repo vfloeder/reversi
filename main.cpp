@@ -2,18 +2,6 @@
 // Copyright (c) 2017 Volker Floeder
 // All rights reserved.
 //
-// Redistribution and use in source and binary forms are permitted
-// provided that the above copyright notice and this paragraph are
-// duplicated in all such forms and that any documentation,
-// advertising materials, and other materials related to such
-// distribution and use acknowledge that the software was developed
-// by Volker Floeder. The name of Volker Floeder may not be used
-// to endorse or promote products derived from this software without
-// specific prior written permission.
-// THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
 
 #include <signal.h>
 #include <atomic>
@@ -119,14 +107,19 @@ int main()
 
         if( Reversi::Stone::WhiteStone == thisMove )
         {
-            statusPrint(cnt, game.getWhiteStones(), game.getBlackStones(), game.getPossibleFlips(), "Calculating... press 'c' to abort");
+            statusPrint(cnt, game.getWhiteStones(), game.getBlackStones(),
+                        game.getPossibleFlips(), "Calculating... press 'c' to abort");
 
-            getch();
+            getch();                                                                // let the screen update...
 
             // GameHandler::MoveInfo inf = game.computeNextMove(thisMove, 8);
 
+            // This is a bit of a strange construct to let the user eventually abort a lengthy computation.
+            // The calculation is done in an async thread so that it is possible to check for user input in parallel.
+            // If the user decides to abort, we'll let the computation end gracefully but we set a flag to abort
             std::future<GameHandler::MoveInfo> moveInfo { std::async(std::launch::async,
-                                                                     [&game, thisMove, calcDepth]() {return game.computeNextMove(thisMove, calcDepth);} ) };
+                                                                     [&game, thisMove, calcDepth]()
+                                                                     {return game.computeNextMove(thisMove, calcDepth);} ) };
 
             while( std::future_status::ready != moveInfo.wait_for(std::chrono::milliseconds(50)) )
             {

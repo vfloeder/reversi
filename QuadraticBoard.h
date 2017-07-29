@@ -2,18 +2,6 @@
 // Copyright (c) 2017 Volker Floeder
 // All rights reserved.
 //
-// Redistribution and use in source and binary forms are permitted
-// provided that the above copyright notice and this paragraph are
-// duplicated in all such forms and that any documentation,
-// advertising materials, and other materials related to such
-// distribution and use acknowledge that the software was developed
-// by Volker Floeder. The name of Volker Floeder may not be used
-// to endorse or promote products derived from this software without
-// specific prior written permission.
-// THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
 
 #ifndef QUADRATICBOARD_H
 #define QUADRATICBOARD_H
@@ -100,6 +88,7 @@ public:
      * @param b     board to copy
      */
     QuadraticBoard( const QuadraticBoard& b )
+    : m_BoardSize { 0 }
     { *this = b; }
 
     /*! @brief assignment operator
@@ -107,22 +96,7 @@ public:
      * @param b     board to assign
      * @return      self-reference
      */
-    QuadraticBoard& operator=( const QuadraticBoard& b )
-    {
-        if( this != &b )
-        {
-            m_BoardSize = b.m_BoardSize;
-
-            for( size_t x { 0 }; x < m_BoardSize; ++x )
-            {
-                for( size_t y { 0 }; y < m_BoardSize; ++y )
-                {
-                    m_Board[x][y] = b.m_Board[x][y];
-                }
-            }
-        }
-        return *this;
-    }
+    QuadraticBoard& operator=( const QuadraticBoard& b );
 
     /*! @brief check if a position is valid, by means of within range of x-coord and y-coord
      *
@@ -194,7 +168,7 @@ QuadraticBoard<FieldType>::Iterator::operator++()
     return *this;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+// =====================================================================================================================
 
 template< typename FieldType>
 QuadraticBoard<FieldType>::QuadraticBoard( int size )
@@ -229,4 +203,21 @@ bool QuadraticBoard<FieldType>::isValidPostion( const Pos_Vect& pos ) const
     return ( pos.getX() >= 0 && pos.getX() < m_BoardSize && pos.getY() >= 0 && pos.getY() < m_BoardSize );
 }
 
+template< typename FieldType>
+QuadraticBoard<FieldType>&  QuadraticBoard<FieldType>::operator=( const QuadraticBoard& b )
+{
+    if( this != &b )
+    {
+        m_BoardSize = b.m_BoardSize;
+
+        for( size_t x { 0 }; x < m_BoardSize; ++x )
+        {
+            for( size_t y { 0 }; y < m_BoardSize; ++y )
+            {
+                m_Board[x][y] = b.m_Board[x][y];
+            }
+        }
+    }
+    return *this;
+}
 #endif //QUADRATICBOARD_H

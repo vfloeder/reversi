@@ -2,18 +2,6 @@
 // Copyright (c) 2017 Volker Floeder
 // All rights reserved.
 //
-// Redistribution and use in source and binary forms are permitted
-// provided that the above copyright notice and this paragraph are
-// duplicated in all such forms and that any documentation,
-// advertising materials, and other materials related to such
-// distribution and use acknowledge that the software was developed
-// by Volker Floeder. The name of Volker Floeder may not be used
-// to endorse or promote products derived from this software without
-// specific prior written permission.
-// THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
 
 #ifndef TERMINALWINDOW_H
 #define TERMINALWINDOW_H
@@ -111,8 +99,7 @@ private:
     WINDOW*                     m_Win;                          ///< screen handle
     int                         m_Cols;                         ///< coloumns to view
     int                         m_Rows;                         ///< rows to view
-    int                         m_OrgCols { -1 };               ///< number of coloumns of "original" terminal window
-    int                         m_OrgRows { -1 };               ///<           rows
+
     std::vector<WindowObject*>  m_Objects {};                   ///< list of objects to print
 
     static constexpr const int  m_KeyboadTimeoutMs { 50 };      ///< key-board wait timeout in milliseconds
