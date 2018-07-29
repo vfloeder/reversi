@@ -36,10 +36,10 @@ if( DOXYGEN_FOUND )
     message("Doxygen build started")
 
     add_custom_target(doxygen_html ALL
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXY_PRJ_CFG}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating documentation..."
-            VERBATIM)
+      COMMAND ${DOXYGEN_EXECUTABLE} ${DOXY_PRJ_CFG}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Generating documentation..."
+      VERBATIM)
 
 else()
     message("doxygen is needed to generate the documentation")
@@ -47,37 +47,110 @@ endif()
 
 find_package(Threads REQUIRED)
 
-set(CMAKE_CXX_STANDARD 11)
+# on ubuntu do "sudo apt install libsdl1.2-dev" to install SDL
 
 if( UNIX )
-    set(PDCurses /mnt/0de4eb21-22e7-407b-8e3f-204d9db348d7/vfdsk/prj-n/PDCurses)
-else()
-    set(PDCurses e:/p2/PDCurses)
+    find_package(SDL REQUIRED)
 endif()
 
-include_directories(${PDCurses})
+set(CMAKE_CXX_STANDARD 11)
+
+## build pdcurses as an external project
+
+if( UNIX )
+    set(cursesSubdir "sdl1")
+    set(makeCommand "make")
+else()
+    set(cursesSubdir "wincon")
+    set(makeCommand nmake -f makefile.vc)
+endif()
+
+# Enable CMake module
+
+include(ExternalProject)
+
+# download and build pdcurses
+
+ExternalProject_Add(
+  PDCurses
+  GIT_REPOSITORY https://github.com/wmcbrine/PDCurses.git
+  GIT_TAG "master"
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}
+  # Disable update and patch
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/PDCurses/pdcurses/${cursesSubdir}
+  SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/PDCurses/pdcurses
+  INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/PDCurses/bin
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ${makeCommand}
+  # Disable install
+  INSTALL_COMMAND ""
+)
+
+# Get pdcurses source and binary dirs
+
+ExternalProject_Get_Property(PDCurses source_dir binary_dir)
+
+# Create a lib target to be used as a dependency
+
+if( DEBUG )
+    set( debugtag "d" )
+endif()
+
+if( UNIX )
+    add_library(libpdcurses IMPORTED STATIC GLOBAL)
+    add_dependencies(libpdcurses PDCurses)
+else()
+    add_library(pdcurses${debugtag} IMPORTED STATIC GLOBAL)
+    add_dependencies(pdcurses${debugtag} PDCurses)
+endif()
+
+# Set library properties
+
+if( UNIX )
+    set_target_properties(libpdcurses PROPERTIES
+      "IMPORTED_LOCATION" "${binary_dir}/libpdcurses.a"
+      "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
+      )
+else()
+    set_target_properties(pdcurses${debugtag} PROPERTIES
+      "IMPORTED_LOCATION" "${binary_dir}/pdcurses${debugtag}.lib"
+      "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
+      )
+endif()
+
+# add include dir
+include_directories("${source_dir}")
+
+if( UNIX )
+    set( PDCurses_Libs "libpdcurses" )
+else()
+    set( PDCurses_Libs "pdcurses${debugtag}")
+endif()
 
 set(SOURCE_FILES
-        main.cpp
-        TerminalWindow.h
-        TerminalWindow.cpp
-        Pos_Vect.h
-        Reversi.h
-        Reversi.cpp
-        FieldValue.h
-        QuadraticBoard.h
-        GameHandler.cpp
-        GameHandler.h
-        CursesGrid.h
-        CursesGrid.cpp
-        FieldList.h)
+  main.cpp
+  TerminalWindow.h
+  TerminalWindow.cpp
+  Pos_Vect.h
+  Reversi.h
+  Reversi.cpp
+  FieldValue.h
+  QuadraticBoard.h
+  GameHandler.cpp
+  GameHandler.h
+  CursesGrid.h
+  CursesGrid.cpp
+  FieldList.h)
 
 add_executable(Reversi ${SOURCE_FILES})
 
 if( UNIX )
-    target_link_libraries(Reversi ${PDCurses}/sdl1/libpdcurses.a SDL pthread)
+    target_link_libraries(Reversi ${PDCurses_Libs} SDL pthread)
 else()
-    target_link_libraries(Reversi ${PDCurses}/win32/pdcurses.lib ${PDCurses}/win32/panel.lib)
+    target_link_libraries(Reversi ${PDCurses_Libs} )
 
     set_target_properties(Reversi PROPERTIES LINK_FLAGS /NODEFAULTLIB:LIBCMT)
 endif()
+

@@ -2,7 +2,7 @@
 
 This is a C++ implementation of the Reversi game, implemented on top of the public domain curses paket ***PDcurses***. It compiles and runs on Linux and Windows. All you need to build it, is a recent C++ compiler like g++, Clang or MSVC, plus CMake and PDCurses.
 
-***Please have a look into the CMakeLists.txt build-script, since you will need to adapt the path to the pdcurses source and library locations.***
+***Please note that on Linux, you need to have SDL (v1) installed. On Ubuntu this can be done via "sudo apt install libsdl1.2-dev".***
 
 I've done this after a very inspiring interview, where I did not really have a reasonable idea of how to attack a game-project. - However, after some thinking - and reading as well - it turned out to be not so complicated.
 
