@@ -53,7 +53,7 @@ if( UNIX )
     find_package(SDL REQUIRED)
 endif()
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 ## build pdcurses as an external project
 
@@ -110,7 +110,7 @@ endif()
 
 if( UNIX )
     set_target_properties(libpdcurses PROPERTIES
-      "IMPORTED_LOCATION" "${binary_dir}/libpdcurses.a"
+      "IMPORTED_LOCATION" "${binary_dir}/pdcurses.a"
       "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
       )
 else()

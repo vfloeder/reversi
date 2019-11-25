@@ -4,7 +4,7 @@
 //
 
 #include <iostream>
-#include <term.h>
+//#include <term.h>
 
 #include "TerminalWindow.h"
 
